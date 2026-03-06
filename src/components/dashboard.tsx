@@ -83,6 +83,7 @@ export function Dashboard() {
     cardRecords[0];
 
   const metrics = buildMetrics(cardRecords);
+  const visibleCards = filteredCards.slice(0, 6);
 
   function handleCardSelect(cardId: string) {
     if (cardId === activeCardId) {
@@ -135,7 +136,7 @@ export function Dashboard() {
               </div>
             </header>
 
-            <section className="grid gap-6 xl:grid-cols-[minmax(0,1.24fr)_440px] xl:items-start">
+            <section className="grid gap-6 xl:grid-cols-[minmax(0,1.18fr)_440px] xl:items-start">
               <div className="space-y-6">
                 <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
                   {metrics.map((metric) => (
@@ -154,6 +155,9 @@ export function Dashboard() {
                       <h2 className="mt-2 font-[family-name:var(--font-display)] text-3xl text-balance">
                         Grid view for every card you manage
                       </h2>
+                      <p className="mt-3 text-sm text-ink-muted">
+                        Showing {visibleCards.length} of {filteredCards.length} cards in a 2-up layout.
+                      </p>
                     </div>
 
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -185,8 +189,8 @@ export function Dashboard() {
                     </div>
                   </div>
 
-                  <div className="grid gap-6 md:grid-cols-2 2xl:grid-cols-3">
-                    {filteredCards.map((card) => (
+                  <div className="grid gap-7 md:grid-cols-2">
+                    {visibleCards.map((card) => (
                       <button
                         key={card.id}
                         type="button"
@@ -198,7 +202,7 @@ export function Dashboard() {
                       >
                         <div
                           className={cn(
-                            "relative aspect-[1.72/1] overflow-hidden rounded-[1.9rem] border border-white/45 px-6 py-5 text-white shadow-[0_28px_56px_rgba(31,43,86,0.2)]",
+                            "relative aspect-[1.68/1] overflow-hidden rounded-[2rem] border border-white/45 px-7 py-6 text-white shadow-[0_28px_56px_rgba(31,43,86,0.2)]",
                             activeCard?.id === card.id ? "shadow-[0_38px_80px_rgba(31,43,86,0.24)]" : "",
                           )}
                           style={{ background: card.surface }}
@@ -211,14 +215,20 @@ export function Dashboard() {
                             <div className="flex items-start justify-between">
                               <div>
                                 <p className="text-sm text-white/72">{card.issuer}</p>
-                                <p className="mt-2 text-[2rem] leading-none text-white">{card.cardProductName}</p>
+                                <p className="mt-3 text-[2.15rem] leading-none text-white">{card.cardProductName}</p>
                               </div>
-                              <div className="rounded-full border border-white/30 bg-black/10 px-3 py-1 text-xs uppercase text-white/80">
-                                {card.network}
+                              <div className="space-y-3 text-right">
+                                <div className="rounded-full border border-white/30 bg-black/10 px-3 py-1 text-xs uppercase text-white/80">
+                                  {card.network}
+                                </div>
+                                <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-2 text-sm text-white/82">
+                                  <span className={cn("status-dot", statusTone[card.status])} />
+                                  <span>{statusLabel[card.status]}</span>
+                                </div>
                               </div>
                             </div>
 
-                            <div className="mt-6 flex items-center gap-3">
+                            <div className="mt-8 flex items-center gap-3">
                               <div
                                 className="h-10 w-14 rounded-2xl border border-white/25 bg-white/15"
                                 style={{ boxShadow: `inset 0 1px 1px rgba(255,255,255,0.22), 0 0 0 1px ${card.accent}` }}
@@ -227,21 +237,20 @@ export function Dashboard() {
 
                             <div className="mt-auto flex items-end justify-between gap-4">
                               <div className="space-y-2">
-                                <p className="text-[11px] uppercase text-white/62">{card.cardType}</p>
-                                <p className="text-3xl tabular-nums text-white">•••• {card.last4}</p>
+                                <p className="text-[11px] uppercase text-white/62">
+                                  {card.cardType === "credit" ? "Credit card" : "Debit card"}
+                                </p>
+                                <p className="text-[2.2rem] leading-none tabular-nums text-white">•••• {card.last4}</p>
                               </div>
                               <div className="min-w-28 space-y-2 text-right">
-                                <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-2 text-sm text-white/82">
-                                  <span className={cn("status-dot", statusTone[card.status])} />
-                                  <span>{statusLabel[card.status]}</span>
-                                </div>
                                 {card.cardType === "credit" ? (
                                   <p className="text-sm text-white/74">
                                     Due {card.dueDay ? `day ${card.dueDay}` : "not set"}
                                   </p>
                                 ) : (
-                                  <p className="text-sm text-white/60">Debit card</p>
+                                  <p className="text-sm text-white/60">No payment due</p>
                                 )}
+                                <p className="text-xs uppercase text-white/50">Tap once to inspect</p>
                               </div>
                             </div>
                           </div>
