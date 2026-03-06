@@ -149,25 +149,25 @@ export function Dashboard() {
                 </div>
 
                 <section className="glass-panel rounded-[2.2rem] p-5 sm:p-6 lg:p-7">
-                  <div className="mb-7 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-                    <div>
+                  <div className="mb-8 grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,760px)] xl:items-end">
+                    <div className="max-w-xl">
                       <p className="text-sm uppercase text-slate-500">Card inventory</p>
-                      <h2 className="mt-2 font-[family-name:var(--font-display)] text-3xl text-balance">
+                      <h2 className="mt-2 font-[family-name:var(--font-display)] text-5xl leading-[0.95] text-balance">
                         Grid view for every card you manage
                       </h2>
-                      <p className="mt-3 text-sm text-ink-muted">
+                      <p className="mt-4 text-sm text-ink-muted">
                         Showing {visibleCards.length} of {filteredCards.length} cards in a 2-up layout.
                       </p>
                     </div>
 
-                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
                       <label className="rounded-full border border-white/70 bg-white/66 px-5 py-3.5 shadow-sm">
                         <span className="sr-only">Search cards</span>
                         <input
                           value={query}
                           onChange={(event) => setQuery(event.target.value)}
                           placeholder="Search issuer, card, or last four"
-                          className="w-full bg-transparent text-sm outline-none placeholder:text-slate-400 sm:w-72"
+                          className="w-full bg-transparent text-sm outline-none placeholder:text-slate-400 sm:w-80"
                         />
                       </label>
 
@@ -189,7 +189,7 @@ export function Dashboard() {
                     </div>
                   </div>
 
-                  <div className="grid gap-7 md:grid-cols-2">
+                  <div className="grid gap-8 md:grid-cols-2">
                     {visibleCards.map((card) => (
                       <button
                         key={card.id}
@@ -197,64 +197,88 @@ export function Dashboard() {
                         onClick={() => handleCardSelect(card.id)}
                         className={cn(
                           "group relative rounded-[2rem] text-left transition-all duration-150 ease-out hover:-translate-y-1",
-                          activeCard?.id === card.id ? "-translate-y-0.5 opacity-100" : "opacity-90 hover:opacity-100",
+                          activeCard?.id === card.id ? "-translate-y-0.5 opacity-100" : "opacity-95 hover:opacity-100",
                         )}
                       >
-                        <div
-                          className={cn(
-                            "relative aspect-[1.68/1] overflow-hidden rounded-[2rem] border border-white/45 px-7 py-6 text-white shadow-[0_28px_56px_rgba(31,43,86,0.2)]",
-                            activeCard?.id === card.id ? "shadow-[0_38px_80px_rgba(31,43,86,0.24)]" : "",
-                          )}
-                          style={{ background: card.surface }}
-                        >
-                          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.32),transparent_34%)]" />
-                          <div className="pointer-events-none absolute inset-y-0 right-0 w-2/5 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.14),transparent_62%)]" />
-                          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-white/60" />
+                        <article className="space-y-3">
+                          <div
+                            className={cn(
+                              "relative aspect-[1.67/1] overflow-hidden rounded-[2rem] border border-white/45 px-7 py-6 text-white shadow-[0_28px_56px_rgba(31,43,86,0.2)]",
+                              activeCard?.id === card.id ? "shadow-[0_38px_80px_rgba(31,43,86,0.24)]" : "",
+                            )}
+                            style={{ background: card.surface }}
+                          >
+                            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.32),transparent_34%)]" />
+                            <div className="pointer-events-none absolute inset-y-0 right-0 w-2/5 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.14),transparent_62%)]" />
+                            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-white/60" />
 
-                          <div className="relative flex h-full flex-col">
-                            <div className="flex items-start justify-between">
-                              <div>
-                                <p className="text-sm text-white/72">{card.issuer}</p>
-                                <p className="mt-3 text-[2.15rem] leading-none text-white">{card.cardProductName}</p>
-                              </div>
-                              <div className="space-y-3 text-right">
-                                <div className="rounded-full border border-white/30 bg-black/10 px-3 py-1 text-xs uppercase text-white/80">
-                                  {card.network}
+                            <div className="relative flex h-full flex-col">
+                              <div className="flex items-start justify-between">
+                                <div>
+                                  <p className="text-sm text-white/72">{card.issuer}</p>
+                                  <p className="mt-3 text-[2.15rem] leading-none text-white">{card.cardProductName}</p>
                                 </div>
-                                <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-2 text-sm text-white/82">
-                                  <span className={cn("status-dot", statusTone[card.status])} />
-                                  <span>{statusLabel[card.status]}</span>
+                                <div className="space-y-3 text-right">
+                                  <div className="rounded-full border border-white/30 bg-black/10 px-3 py-1 text-xs uppercase text-white/80">
+                                    {card.network}
+                                  </div>
+                                  <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-2 text-sm text-white/82">
+                                    <span className={cn("status-dot", statusTone[card.status])} />
+                                    <span>{statusLabel[card.status]}</span>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
 
-                            <div className="mt-8 flex items-center gap-3">
-                              <div
-                                className="h-10 w-14 rounded-2xl border border-white/25 bg-white/15"
-                                style={{ boxShadow: `inset 0 1px 1px rgba(255,255,255,0.22), 0 0 0 1px ${card.accent}` }}
-                              />
-                            </div>
-
-                            <div className="mt-auto flex items-end justify-between gap-4">
-                              <div className="space-y-2">
-                                <p className="text-[11px] uppercase text-white/62">
-                                  {card.cardType === "credit" ? "Credit card" : "Debit card"}
-                                </p>
-                                <p className="text-[2.2rem] leading-none tabular-nums text-white">•••• {card.last4}</p>
+                              <div className="mt-8 flex items-center gap-3">
+                                <div
+                                  className="h-10 w-14 rounded-2xl border border-white/25 bg-white/15"
+                                  style={{ boxShadow: `inset 0 1px 1px rgba(255,255,255,0.22), 0 0 0 1px ${card.accent}` }}
+                                />
                               </div>
-                              <div className="min-w-28 space-y-2 text-right">
-                                {card.cardType === "credit" ? (
-                                  <p className="text-sm text-white/74">
-                                    Due {card.dueDay ? `day ${card.dueDay}` : "not set"}
+
+                              <div className="mt-auto flex items-end justify-between gap-4">
+                                <div className="space-y-2">
+                                  <p className="text-[11px] uppercase text-white/62">
+                                    {card.cardType === "credit" ? "Credit card" : "Debit card"}
                                   </p>
-                                ) : (
-                                  <p className="text-sm text-white/60">No payment due</p>
-                                )}
-                                <p className="text-xs uppercase text-white/50">Tap once to inspect</p>
+                                  <p className="text-[2.2rem] leading-none tabular-nums text-white">•••• {card.last4}</p>
+                                </div>
+                                <div className="min-w-28 space-y-2 text-right">
+                                  {card.cardType === "credit" ? (
+                                    <p className="text-sm text-white/74">
+                                      Due {card.dueDay ? `day ${card.dueDay}` : "not set"}
+                                    </p>
+                                  ) : (
+                                    <p className="text-sm text-white/60">No payment due</p>
+                                  )}
+                                  <p className="text-xs uppercase text-white/50">Tap once to inspect</p>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
+
+                          <div className="glass-panel rounded-[1.45rem] px-4 py-3.5">
+                            <div className="grid grid-cols-[1fr_auto] gap-2 text-sm">
+                              <div>
+                                <p className="text-[11px] uppercase text-slate-500">Card number</p>
+                                <p className="mt-1 tabular-nums text-slate-900">•••• {card.last4}</p>
+                              </div>
+                              <p className="self-end text-sm text-[color:var(--accent)]">View details</p>
+                            </div>
+                            <div className="mt-3 grid grid-cols-2 gap-3 text-sm">
+                              <div>
+                                <p className="text-[11px] uppercase text-slate-500">Card description</p>
+                                <p className="mt-1 text-slate-900">{card.cardType === "credit" ? "Credit card" : "Debit card"}</p>
+                              </div>
+                              <div>
+                                <p className="text-[11px] uppercase text-slate-500">Expires</p>
+                                <p className="mt-1 tabular-nums text-slate-900">
+                                  {card.expirationMonth}/{card.expirationYear}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </article>
                       </button>
                     ))}
                   </div>
