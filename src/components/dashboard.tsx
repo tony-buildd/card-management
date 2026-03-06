@@ -68,6 +68,7 @@ export function Dashboard() {
   const [query, setQuery] = useState("");
   const [typeFilter, setTypeFilter] = useState<CardType | "all">("all");
   const [activeCardId, setActiveCardId] = useState(cardRecords[0]?.id ?? "");
+  const [detailFlipped, setDetailFlipped] = useState(false);
 
   const filteredCards = cardRecords.filter((card) => {
     const matchesType = typeFilter === "all" || card.cardType === typeFilter;
@@ -82,6 +83,16 @@ export function Dashboard() {
     cardRecords[0];
 
   const metrics = buildMetrics(cardRecords);
+
+  function handleCardSelect(cardId: string) {
+    if (cardId === activeCardId) {
+      setDetailFlipped((current) => !current);
+      return;
+    }
+
+    setActiveCardId(cardId);
+    setDetailFlipped(false);
+  }
 
   return (
     <main className="min-h-dvh overflow-hidden px-4 py-4 text-slate-950 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
@@ -179,77 +190,58 @@ export function Dashboard() {
                       <button
                         key={card.id}
                         type="button"
-                        onClick={() => setActiveCardId(card.id)}
+                        onClick={() => handleCardSelect(card.id)}
                         className={cn(
-                          "group relative rounded-[2rem] text-left transition-transform duration-150 ease-out hover:-translate-y-1",
-                          activeCard?.id === card.id ? "ring-2 ring-[color:var(--accent)]/65 ring-offset-4 ring-offset-transparent" : "",
+                          "group relative rounded-[2rem] text-left transition-all duration-150 ease-out hover:-translate-y-1",
+                          activeCard?.id === card.id ? "-translate-y-0.5 opacity-100" : "opacity-90 hover:opacity-100",
                         )}
                       >
-                        <div className="space-y-3">
-                          <div
-                            className="relative aspect-[1.72/1] overflow-hidden rounded-[1.9rem] border border-white/45 px-6 py-5 text-white shadow-[0_28px_56px_rgba(31,43,86,0.2)]"
-                            style={{ background: card.surface }}
-                          >
-                            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.32),transparent_34%)]" />
-                            <div className="pointer-events-none absolute inset-y-0 right-0 w-2/5 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.14),transparent_62%)]" />
-                            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-white/60" />
+                        <div
+                          className={cn(
+                            "relative aspect-[1.72/1] overflow-hidden rounded-[1.9rem] border border-white/45 px-6 py-5 text-white shadow-[0_28px_56px_rgba(31,43,86,0.2)]",
+                            activeCard?.id === card.id ? "shadow-[0_38px_80px_rgba(31,43,86,0.24)]" : "",
+                          )}
+                          style={{ background: card.surface }}
+                        >
+                          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.32),transparent_34%)]" />
+                          <div className="pointer-events-none absolute inset-y-0 right-0 w-2/5 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.14),transparent_62%)]" />
+                          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-white/60" />
 
-                            <div className="relative flex h-full flex-col">
-                              <div className="flex items-start justify-between">
-                                <div>
-                                  <p className="text-sm text-white/72">{card.issuer}</p>
-                                  <p className="mt-2 text-[2rem] leading-none text-white">{card.cardProductName}</p>
-                                </div>
-                                <div className="rounded-full border border-white/30 bg-black/10 px-3 py-1 text-xs uppercase text-white/80">
-                                  {card.network}
-                                </div>
+                          <div className="relative flex h-full flex-col">
+                            <div className="flex items-start justify-between">
+                              <div>
+                                <p className="text-sm text-white/72">{card.issuer}</p>
+                                <p className="mt-2 text-[2rem] leading-none text-white">{card.cardProductName}</p>
                               </div>
-
-                              <div className="mt-6 flex items-center gap-3">
-                                <div
-                                  className="h-10 w-14 rounded-2xl border border-white/25 bg-white/15"
-                                  style={{ boxShadow: `inset 0 1px 1px rgba(255,255,255,0.22), 0 0 0 1px ${card.accent}` }}
-                                />
+                              <div className="rounded-full border border-white/30 bg-black/10 px-3 py-1 text-xs uppercase text-white/80">
+                                {card.network}
                               </div>
+                            </div>
 
-                              <div className="mt-auto flex items-end justify-between">
-                                <div className="space-y-2">
-                                  <p className="text-[11px] uppercase text-white/62">{card.nickname}</p>
-                                  <p className="text-3xl tabular-nums text-white">•••• {card.last4}</p>
+                            <div className="mt-6 flex items-center gap-3">
+                              <div
+                                className="h-10 w-14 rounded-2xl border border-white/25 bg-white/15"
+                                style={{ boxShadow: `inset 0 1px 1px rgba(255,255,255,0.22), 0 0 0 1px ${card.accent}` }}
+                              />
+                            </div>
+
+                            <div className="mt-auto flex items-end justify-between gap-4">
+                              <div className="space-y-2">
+                                <p className="text-[11px] uppercase text-white/62">{card.cardType}</p>
+                                <p className="text-3xl tabular-nums text-white">•••• {card.last4}</p>
+                              </div>
+                              <div className="min-w-28 space-y-2 text-right">
+                                <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-2 text-sm text-white/82">
+                                  <span className={cn("status-dot", statusTone[card.status])} />
+                                  <span>{statusLabel[card.status]}</span>
                                 </div>
-                                <div className="pb-1 text-right">
-                                  <p className="text-[11px] uppercase text-white/58">{card.cardType}</p>
-                                  <p className="mt-2 text-sm text-white/74">
-                                    {activeCard?.id === card.id ? "Selected" : "Open"}
+                                {card.cardType === "credit" ? (
+                                  <p className="text-sm text-white/74">
+                                    Due {card.dueDay ? `day ${card.dueDay}` : "not set"}
                                   </p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="glass-panel rounded-[1.5rem] px-4 py-4">
-                            <div className="flex items-center justify-between">
-                              <div className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/66 px-3 py-2 text-sm text-slate-700">
-                                <span className={cn("status-dot", statusTone[card.status])} />
-                                <span>{statusLabel[card.status]}</span>
-                              </div>
-                              <p className="text-sm text-ink-muted">
-                                Due {card.dueDay ? `day ${card.dueDay}` : "not set"}
-                              </p>
-                            </div>
-
-                            <div className="mt-4 grid grid-cols-3 gap-2.5 text-sm">
-                              <div className="rounded-2xl border border-white/70 bg-white/60 px-3 py-3">
-                                <p className="text-xs uppercase text-slate-500">Autopay</p>
-                                <p className="mt-2 text-slate-900">{card.autopayEnabled ? "Enabled" : "Missing"}</p>
-                              </div>
-                              <div className="rounded-2xl border border-white/70 bg-white/60 px-3 py-3">
-                                <p className="text-xs uppercase text-slate-500">Fee</p>
-                                <p className="mt-2 tabular-nums text-slate-900">{formatCurrency(card.annualFee)}</p>
-                              </div>
-                              <div className="rounded-2xl border border-white/70 bg-white/60 px-3 py-3">
-                                <p className="text-xs uppercase text-slate-500">Type</p>
-                                <p className="mt-2 capitalize text-slate-900">{card.cardType}</p>
+                                ) : (
+                                  <p className="text-sm text-white/60">Debit card</p>
+                                )}
                               </div>
                             </div>
                           </div>
@@ -263,35 +255,102 @@ export function Dashboard() {
               <aside className="glass-panel rounded-[2.2rem] p-6 sm:p-7 xl:sticky xl:top-8">
                 {activeCard ? (
                   <div className="flex h-full flex-col gap-7">
-                    <div
-                      className="overflow-hidden rounded-[2.15rem] border border-white/45 p-6 text-white shadow-[0_32px_70px_rgba(31,43,86,0.2)]"
-                      style={{ background: activeCard.surface }}
+                    <button
+                      type="button"
+                      onClick={() => setDetailFlipped((current) => !current)}
+                      className="group text-left [perspective:1600px]"
+                      aria-label="Flip selected card"
                     >
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <p className="text-sm text-white/72">{activeCard.issuer}</p>
-                          <h3 className="mt-2 font-[family-name:var(--font-display)] text-3xl text-balance">
-                            {activeCard.cardProductName}
-                          </h3>
-                        </div>
-                        <span className="rounded-full border border-white/25 bg-black/10 px-3 py-1 text-xs uppercase text-white/84">
-                          {activeCard.network}
-                        </span>
-                      </div>
+                      <div
+                        className={cn(
+                          "relative min-h-[300px] rounded-[2.15rem] transition-transform duration-300 [transform-style:preserve-3d]",
+                          detailFlipped ? "[transform:rotateY(180deg)]" : "",
+                        )}
+                      >
+                        <div
+                          className="absolute inset-0 overflow-hidden rounded-[2.15rem] border border-white/45 p-6 text-white shadow-[0_32px_70px_rgba(31,43,86,0.2)] [backface-visibility:hidden]"
+                          style={{ background: activeCard.surface }}
+                        >
+                          <div className="flex h-full flex-col">
+                            <div className="flex items-start justify-between">
+                              <div>
+                                <p className="text-sm text-white/72">{activeCard.issuer}</p>
+                                <h3 className="mt-2 font-[family-name:var(--font-display)] text-3xl text-balance">
+                                  {activeCard.cardProductName}
+                                </h3>
+                              </div>
+                              <span className="rounded-full border border-white/25 bg-black/10 px-3 py-1 text-xs uppercase text-white/84">
+                                {activeCard.network}
+                              </span>
+                            </div>
 
-                      <div className="mt-14 grid gap-3.5 sm:grid-cols-2">
-                        <div className="rounded-[1.65rem] border border-white/20 bg-white/10 px-4 py-4">
-                          <p className="text-sm text-white/62">Last four</p>
-                          <p className="mt-2 text-2xl tabular-nums">•••• {activeCard.last4}</p>
+                            <div className="mt-8 flex items-center gap-3">
+                              <div
+                                className="h-11 w-16 rounded-2xl border border-white/25 bg-white/15"
+                                style={{
+                                  boxShadow: `inset 0 1px 1px rgba(255,255,255,0.22), 0 0 0 1px ${activeCard.accent}`,
+                                }}
+                              />
+                            </div>
+
+                            <div className="mt-auto flex items-end justify-between gap-4">
+                              <div className="space-y-2">
+                                <p className="text-[11px] uppercase text-white/62">{activeCard.cardType}</p>
+                                <p className="text-4xl tabular-nums text-white">•••• {activeCard.last4}</p>
+                              </div>
+                              <div className="space-y-2 text-right">
+                                <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-2 text-sm text-white/82">
+                                  <span className={cn("status-dot", statusTone[activeCard.status])} />
+                                  <span>{statusLabel[activeCard.status]}</span>
+                                </div>
+                                {activeCard.cardType === "credit" ? (
+                                  <p className="text-sm text-white/74">
+                                    Due {activeCard.dueDay ? `day ${activeCard.dueDay}` : "not set"}
+                                  </p>
+                                ) : (
+                                  <p className="text-sm text-white/60">Debit card</p>
+                                )}
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                        <div className="rounded-[1.65rem] border border-white/20 bg-white/10 px-4 py-4">
-                          <p className="text-sm text-white/62">Expires</p>
-                          <p className="mt-2 text-2xl tabular-nums">
-                            {activeCard.expirationMonth}/{activeCard.expirationYear}
-                          </p>
+
+                        <div
+                          className="absolute inset-0 overflow-hidden rounded-[2.15rem] border border-white/45 p-6 text-white shadow-[0_32px_70px_rgba(31,43,86,0.2)] [backface-visibility:hidden] [transform:rotateY(180deg)]"
+                          style={{ background: activeCard.surface }}
+                        >
+                          <div className="flex h-full flex-col">
+                            <div className="h-12 rounded-full bg-black/32" />
+                            <div className="mt-6 rounded-[1.8rem] bg-white/88 px-4 py-4 text-slate-900">
+                              <p className="text-xs uppercase text-slate-500">Card back</p>
+                              <div className="mt-4 grid gap-3">
+                                <div className="flex items-center justify-between rounded-2xl bg-slate-100/80 px-4 py-3">
+                                  <span className="text-sm text-slate-500">Autopay</span>
+                                  <span className="text-sm text-slate-900">
+                                    {activeCard.autopayEnabled ? "Enabled" : "Missing"}
+                                  </span>
+                                </div>
+                                <div className="flex items-center justify-between rounded-2xl bg-slate-100/80 px-4 py-3">
+                                  <span className="text-sm text-slate-500">Annual fee</span>
+                                  <span className="text-sm tabular-nums text-slate-900">
+                                    {formatCurrency(activeCard.annualFee)}
+                                  </span>
+                                </div>
+                                <div className="flex items-center justify-between rounded-2xl bg-slate-100/80 px-4 py-3">
+                                  <span className="text-sm text-slate-500">Expires</span>
+                                  <span className="text-sm tabular-nums text-slate-900">
+                                    {activeCard.expirationMonth}/{activeCard.expirationYear}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                            <p className="mt-auto text-sm text-white/72">
+                              Click the card again to return to the front.
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    </button>
 
                     <section className="space-y-5">
                       <div className="flex items-center justify-between">
