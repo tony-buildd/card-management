@@ -84,10 +84,16 @@ export function Dashboard() {
   const metrics = buildMetrics(cardRecords);
 
   return (
-    <main className="min-h-dvh px-5 py-6 text-stone-900 sm:px-8 lg:px-10">
-      <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-6">
-        <header className="glass-panel-strong rounded-[2rem] px-6 py-6 sm:px-8">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+    <main className="min-h-dvh overflow-hidden px-4 py-4 text-stone-900 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
+      <div className="mx-auto max-w-[1720px]">
+        <div className="floating-stage relative overflow-hidden rounded-[2.75rem] px-5 py-6 sm:px-7 sm:py-7 lg:px-9 lg:py-9 xl:px-10 xl:py-10">
+          <div className="pointer-events-none absolute -left-24 top-12 h-72 w-72 rounded-full bg-white/30 blur-3xl" />
+          <div className="pointer-events-none absolute right-12 top-0 h-64 w-64 rounded-full bg-[#cfe2e6]/55 blur-3xl" />
+          <div className="pointer-events-none absolute bottom-12 right-24 h-72 w-72 rounded-full bg-[#e7d8c9]/40 blur-3xl" />
+
+          <div className="relative flex w-full flex-col gap-8 xl:gap-10">
+            <header className="glass-panel-strong rounded-[2.4rem] px-7 py-7 sm:px-8 sm:py-8 lg:px-10 lg:py-9">
+              <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-3xl space-y-4">
               <div className="inline-flex items-center gap-2 rounded-full border border-white/60 bg-white/45 px-3 py-1 text-xs font-medium uppercase text-stone-600">
                 Wallet-inspired card control
@@ -102,11 +108,11 @@ export function Dashboard() {
                 </p>
               </div>
             </div>
-            <div className="grid gap-3 sm:grid-cols-3">
+            <div className="grid gap-4 sm:grid-cols-3">
               {attentionItems.map((item) => (
                 <section
                   key={item.label}
-                  className="rounded-[1.5rem] border border-white/55 bg-white/52 px-4 py-4 shadow-sm"
+                  className="rounded-[1.65rem] border border-white/55 bg-white/52 px-5 py-5 shadow-[0_18px_40px_rgba(15,23,42,0.08)]"
                 >
                   <p className="text-sm text-ink-muted">{item.label}</p>
                   <p className="mt-3 text-2xl tabular-nums">{item.value}</p>
@@ -114,34 +120,34 @@ export function Dashboard() {
                 </section>
               ))}
             </div>
-          </div>
-        </header>
+              </div>
+            </header>
 
-        <section className="grid gap-4 xl:grid-cols-[minmax(0,1.2fr)_420px]">
-          <div className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+            <section className="grid gap-6 xl:grid-cols-[minmax(0,1.24fr)_440px] xl:items-start">
+              <div className="space-y-6">
+                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
               {metrics.map((metric) => (
                 <article
                   key={metric.label}
-                  className="glass-panel rounded-[1.75rem] px-5 py-5"
+                  className="glass-panel rounded-[1.9rem] px-6 py-6"
                 >
                   <p className="text-sm text-ink-muted">{metric.label}</p>
                   <p className="mt-4 text-3xl tabular-nums">{metric.value}</p>
                   <p className="mt-2 text-sm text-ink-muted text-pretty">{metric.note}</p>
                 </article>
               ))}
-            </div>
+                </div>
 
-            <section className="glass-panel rounded-[2rem] p-4 sm:p-5">
-              <div className="mb-5 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                <section className="glass-panel rounded-[2.2rem] p-5 sm:p-6 lg:p-7">
+                  <div className="mb-7 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
                 <div>
                   <p className="text-sm uppercase text-stone-500">Card inventory</p>
                   <h2 className="mt-2 font-[family-name:var(--font-display)] text-3xl text-balance">
                     Grid view for every card you manage
                   </h2>
                 </div>
-                <div className="flex flex-col gap-3 sm:flex-row">
-                  <label className="rounded-full border border-white/60 bg-white/60 px-4 py-3 shadow-sm">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                  <label className="rounded-full border border-white/60 bg-white/60 px-5 py-3.5 shadow-sm">
                     <span className="sr-only">Search cards</span>
                     <input
                       value={query}
@@ -150,14 +156,14 @@ export function Dashboard() {
                       className="w-full bg-transparent text-sm outline-none placeholder:text-stone-400 sm:w-72"
                     />
                   </label>
-                  <div className="inline-flex rounded-full border border-white/60 bg-white/60 p-1 shadow-sm">
+                  <div className="inline-flex rounded-full border border-white/60 bg-white/60 p-1.5 shadow-sm">
                     {cardTypeOptions.map((option) => (
                       <button
                         key={option}
                         type="button"
                         onClick={() => setTypeFilter(option)}
                         className={cn(
-                          "rounded-full px-4 py-2 text-sm transition-colors",
+                          "rounded-full px-4 py-2.5 text-sm transition-colors",
                           typeFilter === option ? "bg-stone-900 text-white" : "text-stone-600",
                         )}
                       >
@@ -166,23 +172,23 @@ export function Dashboard() {
                     ))}
                   </div>
                 </div>
-              </div>
+                  </div>
 
-              <div className="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
+                  <div className="grid gap-5 md:grid-cols-2 2xl:grid-cols-3">
                 {filteredCards.map((card) => (
                   <button
                     key={card.id}
                     type="button"
                     onClick={() => setActiveCardId(card.id)}
                     className={cn(
-                      "group relative overflow-hidden rounded-[2rem] border border-white/45 p-5 text-left shadow-lg transition-transform duration-150 ease-out hover:-translate-y-0.5",
+                      "group relative overflow-hidden rounded-[2.1rem] border border-white/45 p-6 text-left shadow-[0_28px_56px_rgba(15,23,42,0.18)] transition-transform duration-150 ease-out hover:-translate-y-1",
                       activeCard?.id === card.id ? "ring-2 ring-stone-900/70" : "ring-1 ring-transparent",
                     )}
                     style={{ background: card.surface }}
                   >
                     <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.34),transparent_34%)]" />
                     <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-white/60" />
-                    <div className="relative flex min-h-60 flex-col">
+                    <div className="relative flex min-h-64 flex-col">
                       <div className="flex items-start justify-between">
                         <div>
                           <p className="text-sm text-white/72">{card.issuer}</p>
@@ -193,31 +199,31 @@ export function Dashboard() {
                         </div>
                       </div>
 
-                      <div className="mt-10 flex-1">
+                      <div className="mt-12 flex-1">
                         <p className="text-sm uppercase text-white/65">{card.nickname}</p>
                         <p className="mt-3 text-3xl text-white tabular-nums">•••• {card.last4}</p>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-3 text-sm text-white/82">
-                        <div className="rounded-2xl border border-white/20 bg-white/10 px-3 py-3">
+                      <div className="grid grid-cols-2 gap-3.5 text-sm text-white/82">
+                        <div className="rounded-2xl border border-white/20 bg-white/10 px-4 py-3.5">
                           <p className="text-white/62">Type</p>
                           <p className="mt-2 capitalize">{card.cardType}</p>
                         </div>
-                        <div className="rounded-2xl border border-white/20 bg-white/10 px-3 py-3">
+                        <div className="rounded-2xl border border-white/20 bg-white/10 px-4 py-3.5">
                           <p className="text-white/62">Due</p>
                           <p className="mt-2">{formatDueDay(card.dueDay)}</p>
                         </div>
-                        <div className="rounded-2xl border border-white/20 bg-white/10 px-3 py-3">
+                        <div className="rounded-2xl border border-white/20 bg-white/10 px-4 py-3.5">
                           <p className="text-white/62">Autopay</p>
                           <p className="mt-2">{card.autopayEnabled ? "Enabled" : "Missing"}</p>
                         </div>
-                        <div className="rounded-2xl border border-white/20 bg-white/10 px-3 py-3">
+                        <div className="rounded-2xl border border-white/20 bg-white/10 px-4 py-3.5">
                           <p className="text-white/62">Fee</p>
                           <p className="mt-2 tabular-nums">{formatCurrency(card.annualFee)}</p>
                         </div>
                       </div>
 
-                      <div className="mt-4 flex items-center justify-between text-sm text-white/74">
+                      <div className="mt-5 flex items-center justify-between text-sm text-white/74">
                         <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/8 px-3 py-2">
                           <span className={cn("status-dot", statusTone[card.status])} />
                           <span>{statusLabel[card.status]}</span>
@@ -227,15 +233,15 @@ export function Dashboard() {
                     </div>
                   </button>
                 ))}
+                  </div>
+                </section>
               </div>
-            </section>
-          </div>
 
-          <aside className="glass-panel rounded-[2rem] p-5 sm:p-6">
+              <aside className="glass-panel rounded-[2.2rem] p-6 sm:p-7 xl:sticky xl:top-8">
             {activeCard ? (
-              <div className="flex h-full flex-col gap-6">
+                <div className="flex h-full flex-col gap-7">
                 <div
-                  className="overflow-hidden rounded-[2rem] border border-white/45 p-5 text-white shadow-lg"
+                  className="overflow-hidden rounded-[2.15rem] border border-white/45 p-6 text-white shadow-[0_32px_70px_rgba(15,23,42,0.2)]"
                   style={{ background: activeCard.surface }}
                 >
                   <div className="flex items-start justify-between">
@@ -249,12 +255,12 @@ export function Dashboard() {
                       {activeCard.network}
                     </span>
                   </div>
-                  <div className="mt-12 grid gap-3 sm:grid-cols-2">
-                    <div className="rounded-[1.5rem] border border-white/20 bg-white/10 px-4 py-4">
+                  <div className="mt-14 grid gap-3.5 sm:grid-cols-2">
+                    <div className="rounded-[1.65rem] border border-white/20 bg-white/10 px-4 py-4">
                       <p className="text-sm text-white/62">Last four</p>
                       <p className="mt-2 text-2xl tabular-nums">•••• {activeCard.last4}</p>
                     </div>
-                    <div className="rounded-[1.5rem] border border-white/20 bg-white/10 px-4 py-4">
+                    <div className="rounded-[1.65rem] border border-white/20 bg-white/10 px-4 py-4">
                       <p className="text-sm text-white/62">Expires</p>
                       <p className="mt-2 text-2xl tabular-nums">
                         {activeCard.expirationMonth}/{activeCard.expirationYear}
@@ -263,7 +269,7 @@ export function Dashboard() {
                   </div>
                 </div>
 
-                <section className="space-y-4">
+                <section className="space-y-5">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm uppercase text-stone-500">Card detail</p>
@@ -273,7 +279,7 @@ export function Dashboard() {
                     </div>
                     <button
                       type="button"
-                      className="rounded-full border border-stone-200 bg-white/80 px-4 py-2 text-sm shadow-sm"
+                      className="rounded-full border border-stone-200 bg-white/80 px-4 py-2.5 text-sm shadow-sm"
                     >
                       Edit card
                     </button>
@@ -291,7 +297,7 @@ export function Dashboard() {
                     ].map(([label, value]) => (
                       <div
                         key={label}
-                        className="flex items-center justify-between rounded-[1.5rem] border border-white/60 bg-white/62 px-4 py-4"
+                        className="flex items-center justify-between rounded-[1.65rem] border border-white/60 bg-white/62 px-4 py-4"
                       >
                         <dt className="text-sm text-ink-muted">{label}</dt>
                         <dd className="max-w-[60%] truncate text-right text-sm capitalize tabular-nums">
@@ -302,23 +308,23 @@ export function Dashboard() {
                   </dl>
                 </section>
 
-                <section className="grid gap-3">
-                  <article className="rounded-[1.5rem] border border-white/60 bg-white/62 px-4 py-4">
+                <section className="grid gap-3.5">
+                  <article className="rounded-[1.65rem] border border-white/60 bg-white/62 px-4 py-4">
                     <p className="text-sm text-ink-muted">Rewards summary</p>
                     <p className="mt-2 text-sm leading-7 text-pretty">{activeCard.rewardsSummary}</p>
                   </article>
-                  <article className="rounded-[1.5rem] border border-white/60 bg-white/62 px-4 py-4">
+                  <article className="rounded-[1.65rem] border border-white/60 bg-white/62 px-4 py-4">
                     <p className="text-sm text-ink-muted">Benefits summary</p>
                     <p className="mt-2 text-sm leading-7 text-pretty">{activeCard.benefitsSummary}</p>
                   </article>
-                  <article className="rounded-[1.5rem] border border-white/60 bg-white/62 px-4 py-4">
+                  <article className="rounded-[1.65rem] border border-white/60 bg-white/62 px-4 py-4">
                     <p className="text-sm text-ink-muted">Personal notes</p>
                     <p className="mt-2 text-sm leading-7 text-pretty">{activeCard.notes}</p>
                   </article>
                 </section>
               </div>
             ) : (
-              <div className="flex h-full min-h-80 flex-col items-start justify-center rounded-[1.75rem] border border-dashed border-stone-300 px-5">
+                <div className="flex h-full min-h-80 flex-col items-start justify-center rounded-[1.9rem] border border-dashed border-stone-300 px-5">
                 <p className="font-[family-name:var(--font-display)] text-2xl text-balance">No cards match this filter.</p>
                 <p className="mt-3 text-sm leading-7 text-ink-muted text-pretty">
                   Clear the search or switch the type filter to see your full card inventory again.
@@ -335,8 +341,10 @@ export function Dashboard() {
                 </button>
               </div>
             )}
-          </aside>
-        </section>
+              </aside>
+            </section>
+          </div>
+        </div>
       </div>
     </main>
   );

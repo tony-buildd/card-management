@@ -10,6 +10,8 @@
   --panel-strong: rgba(255, 255, 255, 0.82);
   --stroke: rgba(255, 255, 255, 0.62);
   --shadow: 0 24px 64px rgba(15, 23, 42, 0.12);
+  --shadow-float: 0 34px 90px rgba(15, 23, 42, 0.16);
+  --shadow-soft: 0 22px 54px rgba(15, 23, 42, 0.08);
   --accent: #0f5a6a;
   --accent-soft: rgba(15, 90, 106, 0.12);
   --danger: #9b3a30;
@@ -32,6 +34,7 @@ body {
   min-height: 100dvh;
   color: var(--foreground);
   background:
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.55), transparent 34%),
     radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.75), transparent 18%),
     radial-gradient(circle at 80% 0%, rgba(206, 226, 231, 0.8), transparent 16%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0));
@@ -57,15 +60,22 @@ textarea {
   .glass-panel {
     background: var(--panel);
     border: 1px solid var(--stroke);
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow-soft);
     backdrop-filter: blur(14px);
   }
 
   .glass-panel-strong {
     background: var(--panel-strong);
     border: 1px solid rgba(255, 255, 255, 0.72);
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow-float);
     backdrop-filter: blur(14px);
+  }
+
+  .floating-stage {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.36));
+    border: 1px solid rgba(255, 255, 255, 0.68);
+    box-shadow: 0 42px 120px rgba(15, 23, 42, 0.14);
+    backdrop-filter: blur(18px);
   }
 
   .text-ink-muted {
