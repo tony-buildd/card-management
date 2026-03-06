@@ -6,15 +6,15 @@
     "predev": "rm -rf .next",
     "dev": "next dev --turbopack --hostname 127.0.0.1",
     "dev:clean": "rm -rf .next && next dev --turbopack --hostname 127.0.0.1",
-    "build": "rm -rf .next && next build",
+    "build": "rm -rf .next && next build --webpack",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
     "clsx": "^2.1.1",
-    "next": "^15.3.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "next": "^16.1.6",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "tailwind-merge": "^3.3.0"
   },
   "devDependencies": {
